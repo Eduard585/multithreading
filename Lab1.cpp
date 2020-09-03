@@ -48,7 +48,7 @@ int main(int argc, char** argv)
 		int64_t columns = b[0].size();
 		char buf[1000];
 		int res = -1;
-		std::cout << "Begin multiplay" << std::endl;
+		std::cout << "Begin multiply" << std::endl;
 		ULONGLONG startTime = GetTickCount64(), timeMultiply;
 
 		switch (mode) {
