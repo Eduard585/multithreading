@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
 			sort_recursive(numbers, arraySize, rank, size - 1, rankPower);
 
 			std::ofstream output(argv[2]);
-			write_file(output, Multi, numbers);
+			write_file(output, arraySize, numbers);
 			auto finish = std::chrono::high_resolution_clock::now();
 			std::cout << double(std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count()) / 1000 << std::endl;
 		}
