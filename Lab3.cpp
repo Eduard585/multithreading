@@ -25,10 +25,9 @@ int main(int argc, char* argv[]) {
 
 	if (argc != 4) { std::cout << "Usage: enter input and output filenames, number of iterations to perform sorting.\n"; return 1; }
 	int iter_count = atoi(argv[3]);
-	// This is a lame means to iterate through the program; 
-	// better to use a script (.bat, python, bash, whichever you like) to gather statistics
+	
 	for (int iter = 0; iter < iter_count; iter++) {
-		// calculating index for a future search of a neighbor process (see README)
+		
 		int rankPower = 0;
 		while (pow(2, rankPower) <= rank)
 			rankPower++;
@@ -39,14 +38,14 @@ int main(int argc, char* argv[]) {
 			std::ifstream input(argv[1]);
 			if (!input) { std::cout << "Input file not found.\n"; return 1; }
 
-			// I use malloc because sometimes MPI has problems with memory allocated with "new"
+			
 			int* numbers = (int*)malloc(MAX_SIZE * sizeof(int));
 			int arraySize = read_file(input, numbers);
 
 			sort_recursive(numbers, arraySize, rank, size - 1, rankPower);
 
 			std::ofstream output(argv[2]);
-			write_file(output, arraySize, numbers);
+			write_file(output, Multi, numbers);
 			auto finish = std::chrono::high_resolution_clock::now();
 			std::cout << double(std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count()) / 1000 << std::endl;
 		}
@@ -54,7 +53,7 @@ int main(int argc, char* argv[]) {
 			MPI_Status status;
 			int subarray_size;
 			MPI_Probe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
-			// Capturing size of the array to receive
+			
 			MPI_Get_count(&status, MPI_INT, &subarray_size);
 
 			int source_process = status.MPI_SOURCE;
