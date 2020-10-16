@@ -1,1 +1,0 @@
-STATIC MODE (chunk size = 20) : 1000x1200 on 1200x1400, spent 44781 milliseconds
