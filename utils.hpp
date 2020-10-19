@@ -7,6 +7,7 @@
 #include <tuple>
 #include <algorithm>
 #include <random>
+#include "mpi.h"
 
 using namespace std;
 
@@ -112,6 +113,7 @@ namespace utils {
 			MPI_Send(&order, 1, MPI_INT, 0, ORDER, MPI_COMM_WORLD);
 			MPI_Gatherv(arrayLocal, arrayLocalSize, MPI_INT, nullptr, nullptr, nullptr, MPI_INT, 0, MPI_COMM_WORLD);
 		}
+		//delete[]arrayLocal;
 	}
 
 	void findPivotAndSwap(MPI_Comm currentCommunicator) {
@@ -134,7 +136,7 @@ namespace utils {
 			std::default_random_engine generator(rd());
 			std::uniform_int_distribution<int> distribution(0, arrayLocalSize - 1);
 			int randIndex = distribution(generator);
-			pivot = arrayLocal[randIndex];
+			pivot = arrayLocal[randIndex];			
 		}
 		MPI_Bcast(&pivot, 1, MPI_INT, 0, currentCommunicator);
 		// rearrange
@@ -154,6 +156,7 @@ namespace utils {
 		order = 2 * order + (currentRank & 1);
 
 		findPivotAndSwap(newCommunicator);
+		
 	}
 
 	void moveItemsInOrder(int rank, MPI_Comm communicator) {
@@ -195,6 +198,7 @@ namespace utils {
 		delete[] arrayLocal;
 		arrayLocal = newArray;
 		arrayLocalSize += recvSize - sendSize;
+		delete[]newArray;
 	}
 
 	void gatherSortArray(int* array, int numsProcess) {

@@ -1,6 +1,6 @@
-// ConsoleApplication1.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
-
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 #include "mpi.h"
 #include "utils.hpp"
 #include <string>
@@ -23,6 +23,7 @@ int main(int argc, char** argv) {
     }
     else if (argc != 3) {
         cout << "Not all arguments specified!" << endl;
+		_CrtDumpMemoryLeaks();
         return (1);
     }
     else
@@ -62,8 +63,10 @@ int main(int argc, char** argv) {
             cout << str << endl;
             writeLogTime(str);
             printAnswer(nums, numsSize, outFile);
+			delete[]nums;
         }
         MPI_Finalize();
     }
+	_CrtDumpMemoryLeaks();
     return 0;
 }
