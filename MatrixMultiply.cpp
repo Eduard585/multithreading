@@ -32,6 +32,18 @@ std::vector<std::vector<double>> MatrixMultiply::multiplyParallelStatic(std::vec
 		}
 		result[0][0] = sum;
 	}
+	else if (rows1 < 4) {
+#pragma omp parallel for schedule(static,chunkSize) shared(a,b)
+		for (int64_t i = 0; i < rows1 * columns2; i++) {
+			int64_t column = i % columns2;
+			int64_t row = i / columns2;
+			int sum = 0;
+			for (int inner = 0; inner < inter21; inner++) {
+				sum += a[row][inner] * b[inner][column];
+			}
+			result[row][column] = sum;
+			}
+		}
 	else {
 #pragma omp parallel for schedule(static) shared(a,b)
 		for (int64_t row = 0; row < rows1; row++) {
@@ -57,7 +69,19 @@ std::vector<std::vector<double>> MatrixMultiply::multiplyParallelDynamic(std::ve
 			sum += a[0][inner] * b[inner][0];
 		}
 		result[0][0] = sum;
-	}	
+	}
+	else if (rows1 < 4) {
+#pragma omp parallel for schedule(static,chunkSize) shared(a,b)
+		for (int64_t i = 0; i < rows1 * columns2; i++) {
+			int64_t column = i % columns2;
+			int64_t row = i / columns2;
+			int sum = 0;
+			for (int inner = 0; inner < inter21; inner++) {
+				sum += a[row][inner] * b[inner][column];
+			}
+			result[row][column] = sum;
+			}
+		}
 	else {
 #pragma omp parallel for schedule(dynamic,chunkSize) shared(a,b)
 		for (int64_t row = 0; row < rows1; row++) {
@@ -84,6 +108,18 @@ std::vector<std::vector<double>> MatrixMultiply::multiplyParallelGuided(std::vec
 		}
 		result[0][0] = sum;
 	}
+	else if (rows1 < 4) {
+#pragma omp parallel for schedule(static,chunkSize) shared(a,b)
+		for (int64_t i = 0; i < rows1 * columns2; i++) {
+			int64_t column = i % columns2;
+			int64_t row = i / columns2;
+			int sum = 0;
+			for (int inner = 0; inner < inter21; inner++) {
+				sum += a[row][inner] * b[inner][column];
+			}
+			result[row][column] = sum;
+			}
+		}
 	else {
 #pragma omp parallel for schedule(guided,chunkSize) shared(a,b)
 		for (int64_t row = 0; row < rows1; row++) {
